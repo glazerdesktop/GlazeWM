@@ -1,0 +1,1489 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "empty": {
+      "pattern": "^\\s+$"
+    },
+    "invalid-shorthand-property": {
+      "pattern": "^\\s+$|\\spx\\s|\\spx$|^px"
+    },
+    "command": {
+      "title": "command",
+      "description": "A command\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#available-commands",
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "$ref": "#/definitions/invalid-shorthand-property"
+      },
+      "examples": [
+        "focus left",
+        "focus right",
+        "focus up",
+        "focus down",
+        "focus workspace prev",
+        "focus workspace next",
+        "focus workspace recent",
+        "move left",
+        "move right",
+        "move up",
+        "move down",
+        "move to workspace WORKSPACE_NAME",
+        "resize HEIGHT WIDTH",
+        "resize borders SHORTHAND_PROPERTY",
+        "set floating",
+        "set tiling",
+        "set minimized",
+        "set maximized",
+        "toggle floating",
+        "toggle maximized",
+        "focus mode toggle",
+        "tiling direction vertical",
+        "tiling direction horizontal",
+        "tiling direction toggle",
+        "exit wm",
+        "reload config",
+        "close",
+        "exec PROCESS_NAME",
+        "ignore"
+      ]
+    },
+    "binding": {
+      "title": "binding",
+      "description": "A binding\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#keybindings",
+      "type": "string",
+      "not": {
+        "pattern": "^\\s+$"
+      },
+      "examples": ["Alt+H"]
+    },
+    "commands": {
+      "title": "commands",
+      "description": "Commands\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#available-commands",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 2,
+      "items": {
+        "$ref": "#/definitions/command"
+      }
+    },
+    "bindings": {
+      "title": "bindings",
+      "description": "Bindings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#keybindings",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 2,
+      "items": {
+        "$ref": "#/definitions/binding"
+      }
+    },
+    "color": {
+      "type": "string",
+      "pattern": "^\\S+$",
+      "examples": [
+        "red",
+        "orange",
+        "yellow",
+        "green",
+        "cyan",
+        "blue",
+        "purple",
+        "pink",
+        "white",
+        "black",
+        "#000000",
+        "#FF0000",
+        "#00FF00",
+        "#0000FF",
+        "#FFFF00",
+        "#FF00FF",
+        "#FFFFFF"
+      ]
+    },
+    "length": {
+      "type": "string",
+      "pattern": "^\\d+px$",
+      "examples": ["20px"]
+    },
+    "padding-property": {
+      "title": "padding",
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "$ref": "#/definitions/invalid-shorthand-property"
+      },
+      "default": "0"
+    },
+    "opacity-property": {
+      "title": "opacity",
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1,
+      "default": 1
+    },
+    "background-property": {
+      "title": "background",
+      "$ref": "#/definitions/color",
+      "default": "#101010"
+    },
+    "foreground-property": {
+      "title": "foreground",
+      "$ref": "#/definitions/color",
+      "default": "white"
+    },
+    "font-family-property": {
+      "title": "font family",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^\\S+(\\s+\\S+)*$",
+      "default": "Segoe UI"
+    },
+    "font-size-property": {
+      "title": "font size",
+      "$ref": "#/definitions/length",
+      "default": "13px"
+    },
+    "font-weight-property": {
+      "title": "font weight",
+      "type": "integer",
+      "minimum": 0,
+      "default": 400,
+      "examples": ["100", "950"]
+    },
+    "border-width-property": {
+      "title": "border width",
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "$ref": "#/definitions/invalid-shorthand-property"
+      },
+      "default": "0"
+    },
+    "border-color-property": {
+      "title": "border color",
+      "$ref": "#/definitions/color",
+      "default": "blue"
+    },
+    "component.type-property": {
+      "title": "type",
+      "description": "A type of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "type": "string",
+      "minLength": 1,
+      "pattern": "\\S",
+      "examples": [
+        "clock",
+        "battery",
+        "cpu",
+        "gpu",
+        "network",
+        "volume",
+        "text file",
+        "weather",
+        "image",
+        "system tray",
+        "music"
+      ]
+    },
+    "component.margin-property": {
+      "title": "margin",
+      "description": "A margin of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "type": "string",
+      "minLength": 1,
+      "not": {
+        "$ref": "#/definitions/invalid-shorthand-property"
+      },
+      "default": "0 10px 0 0"
+    },
+    "component.padding-property": {
+      "description": "A padding of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/padding-property"
+    },
+    "component.opacity-property": {
+      "description": "An opacity of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/opacity-property"
+    },
+    "component.background-property": {
+      "description": "A background of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/background-property"
+    },
+    "component.foreground-property": {
+      "description": "A foreground of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/foreground-property"
+    },
+    "component.font-family-property": {
+      "description": "A font family of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/font-family-property"
+    },
+    "component.font-size-property": {
+      "description": "A font size of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/font-size-property"
+    },
+    "component.font-weight-property": {
+      "description": "A font weight of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/font-weight-property"
+    },
+    "component.border-width-property": {
+      "description": "A border width of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/border-width-property"
+    },
+    "component.border-color-property": {
+      "description": "A border color of the component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+      "$ref": "#/definitions/border-color-property"
+    },
+    "components": {
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "description": "Component settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-configuration",
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/definitions/component.type-property"
+          },
+          "margin": {
+            "$ref": "#/definitions/component.margin-property"
+          },
+          "padding": {
+            "$ref": "#/definitions/component.padding-property"
+          },
+          "opacity": {
+            "$ref": "#/definitions/component.opacity-property"
+          },
+          "background": {
+            "$ref": "#/definitions/component.background-property"
+          },
+          "foreground": {
+            "$ref": "#/definitions/component.foreground-property"
+          },
+          "font_family": {
+            "$ref": "#/definitions/component.font-family-property"
+          },
+          "font_size": {
+            "$ref": "#/definitions/component.font-size-property"
+          },
+          "font_weight": {
+            "$ref": "#/definitions/component.font-weight-property"
+          },
+          "border_width": {
+            "$ref": "#/definitions/component.border-width-property"
+          },
+          "border_color": {
+            "$ref": "#/definitions/component.border-color-property"
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "clock"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "time_formatting": {
+                  "title": "time formatting",
+                  "description": "A time formatting of the 'Clock' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-clock",
+                  "type": "string",
+                  "examples": ["hh:mm tt  ddd MMM d"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "battery"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label_draining": {
+                  "title": "label draining",
+                  "description": "A draining label of the 'Battery' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-battery",
+                  "type": "string",
+                  "examples": ["{battery_level}% remaining"]
+                },
+                "label_power_saver": {
+                  "title": "label power saver",
+                  "description": "A power saver label of the 'Battery' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-battery",
+                  "type": "string",
+                  "examples": ["{battery_level}% (power saver)"]
+                },
+                "label_charging": {
+                  "title": "label charging",
+                  "description": "A charging label of the 'Battery' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-battery",
+                  "type": "string",
+                  "examples": ["{battery_level}% (charging)"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "cpu"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label": {
+                  "title": "label",
+                  "description": "A label for the 'CPU Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-cpu-usage",
+                  "type": "string",
+                  "examples": ["CPU: {percent_usage}%"]
+                },
+                "refresh_interval_ms": {
+                  "title": "refresh interval ms",
+                  "description": "A refresh interval for the 'CPU Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-cpu-usage",
+                  "type": "integer",
+                  "minimum": 0,
+                  "examples": [1000]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "gpu"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label": {
+                  "title": "label",
+                  "description": "A label for the 'GPU Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-gpu-usage",
+                  "type": "string",
+                  "examples": ["GPU: {percent_usage}%"]
+                },
+                "refresh_interval_ms": {
+                  "title": "refresh interval ms",
+                  "description": "A refresh interval for the 'GPU Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-gpu-usage",
+                  "type": "integer",
+                  "minimum": 0,
+                  "examples": [1000]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "memory"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label": {
+                  "title": "label",
+                  "description": "A label for the 'Memory Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-memory-usage",
+                  "type": "string",
+                  "examples": ["RAM: {percent_usage}%"]
+                },
+                "refresh_interval_ms": {
+                  "title": "refresh interval ms",
+                  "description": "A refresh interval for the 'Memory Usage' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-memory-usage",
+                  "type": "integer",
+                  "minimum": 0,
+                  "examples": [1000]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "network"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label_no_internet": {
+                  "title": "label no internet",
+                  "description": "A label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["NC"]
+                },
+                "label_ethernet": {
+                  "title": "label ethernet",
+                  "description": "An ethernet label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["Eth"]
+                },
+                "label_wifi_strength_0": {
+                  "title": "label wifi strength 0",
+                  "description": "A 0% strength WiFi label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["WiFi: 0%"]
+                },
+                "label_wifi_strength_25": {
+                  "title": "label wifi strength 25",
+                  "description": "A 25% strength WiFi label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["WiFi: 25%"]
+                },
+                "label_wifi_strength_50": {
+                  "title": "label wifi strength 50",
+                  "description": "A 50% strength WiFi label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["WiFi: 50%"]
+                },
+                "label_wifi_strength_75": {
+                  "title": "label wifi strength 75",
+                  "description": "A 75% strength WiFi label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["WiFi: 75%"]
+                },
+                "label_wifi_strength_100": {
+                  "title": "label wifi strength 100",
+                  "description": "A 100% strength WiFi label for the 'Network' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-network",
+                  "type": "string",
+                  "examples": ["WiFi: 100%"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "volume"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label_low": {
+                  "title": "label low",
+                  "description": "A low volume label for the 'Volume' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-volume",
+                  "type": "string",
+                  "examples": ["🔊{volume_level}%"]
+                },
+                "label_medium": {
+                  "title": "label medium",
+                  "description": "A medium volume label for the 'Volume' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-volume",
+                  "type": "string",
+                  "examples": ["🔊{volume_level}%"]
+                },
+                "label_high": {
+                  "title": "label high",
+                  "description": "A high volume label for the 'Volume' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-volume",
+                  "type": "string",
+                  "examples": ["🔊{volume_level}%"]
+                },
+                "label_mute": {
+                  "title": "label mute",
+                  "description": "A no volume label for the 'Volume' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-volume",
+                  "type": "string",
+                  "examples": ["🔊{volume_level}%"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "text file"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "file_path": {
+                  "title": "file path",
+                  "description": "A file path for the 'Text File' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-text-file",
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "weather"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "latitude": {
+                  "title": "latitude",
+                  "description": "A latitude for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "number",
+                  "minimum": -90,
+                  "maximum": 90
+                },
+                "longitude": {
+                  "title": "longitude",
+                  "description": "A longitude for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "number",
+                  "minimum": -180,
+                  "maximum": 180
+                },
+                "label": {
+                  "title": "label",
+                  "description": "A label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["{temperature_celsius}°C"]
+                },
+                "label_sun": {
+                  "title": "label sun",
+                  "description": "A sun label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["☀️ {temperature_celsius}°C"]
+                },
+                "label_moon": {
+                  "title": "label moon",
+                  "description": "A moon label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["🌙 {temperature_celsius}°C"]
+                },
+                "label_cloud_moon": {
+                  "title": "label cloud moon",
+                  "description": "A cloud moon label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["🌙☁️ {temperature_celsius}°C"]
+                },
+                "label_cloud_sun": {
+                  "title": "label cloud sun",
+                  "description": "A cloud sun label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["⛅ {temperature_celsius}°C"]
+                },
+                "label_cloud_moon_rain": {
+                  "title": "label cloud moon rain",
+                  "description": "A cloud moon rain label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["🌙🌧️ {temperature_celsius}°C"]
+                },
+                "label_cloud_sun_rain": {
+                  "title": "label cloud sun rain",
+                  "description": "A cloud sun rain label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["🌦️ {temperature_celsius}°C"]
+                },
+                "label_cloud_rain": {
+                  "title": "label cloud rain",
+                  "description": "A cloud rain label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["🌧️ {temperature_celsius}°C"]
+                },
+                "label_snow_flake": {
+                  "title": "label snow flake",
+                  "description": "A snow flake label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["❄️ {temperature_celsius}°C"]
+                },
+                "label_thunderstorm": {
+                  "title": "label thunderstorm",
+                  "description": "A thunderstorm label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["⚡ {temperature_celsius}°C"]
+                },
+                "label_cloud": {
+                  "title": "label cloud",
+                  "description": "A cloud label for the 'Weather' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-weather",
+                  "type": "string",
+                  "examples": ["☁️ {temperature_celsius}°C"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "image"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "source": {
+                  "title": "source",
+                  "description": "A source path for the 'Image' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-image",
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "system tray"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label_expand_text": {
+                  "title": "label expand text",
+                  "description": "An expand label for the 'System Tray' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-system-tray",
+                  "type": "string",
+                  "examples": ["<"]
+                },
+                "label_collapse_text": {
+                  "title": "label collapse text",
+                  "description": "An collapse label for the 'System Tray' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-system-tray",
+                  "type": "string",
+                  "examples": [">"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "type": {
+                  "const": "music"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "type": {
+                  "$ref": "#/definitions/component.type-property"
+                },
+                "margin": {
+                  "$ref": "#/definitions/component.margin-property"
+                },
+                "padding": {
+                  "$ref": "#/definitions/component.padding-property"
+                },
+                "opacity": {
+                  "$ref": "#/definitions/component.opacity-property"
+                },
+                "background": {
+                  "$ref": "#/definitions/component.background-property"
+                },
+                "foreground": {
+                  "$ref": "#/definitions/component.foreground-property"
+                },
+                "font_family": {
+                  "$ref": "#/definitions/component.font-family-property"
+                },
+                "font_size": {
+                  "$ref": "#/definitions/component.font-size-property"
+                },
+                "font_weight": {
+                  "$ref": "#/definitions/component.font-weight-property"
+                },
+                "border_width": {
+                  "$ref": "#/definitions/component.border-width-property"
+                },
+                "border_color": {
+                  "$ref": "#/definitions/component.border-color-property"
+                },
+                "label_not_playing": {
+                  "title": "label not playing",
+                  "description": "A not playing label for the 'Music' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-music",
+                  "type": "string"
+                },
+                "label_paused": {
+                  "title": "label paused",
+                  "description": "A paused label for the 'Music' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-music",
+                  "type": "string",
+                  "examples": ["{song_title} - {artist_name}"]
+                },
+                "label_playing": {
+                  "title": "label playing",
+                  "description": "A playing label for the 'Music' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-music",
+                  "type": "string",
+                  "examples": ["{song_title} - {artist_name}"]
+                },
+                "max_title_length": {
+                  "title": "max title length",
+                  "description": "A maximum title length for the 'Music' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-music",
+                  "type": "integer",
+                  "minimum": 0,
+                  "examples": [20]
+                },
+                "max_artist_length": {
+                  "title": "max artist length",
+                  "description": "A maximum artist length for the 'Music' component\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-component-music",
+                  "type": "integer",
+                  "minimum": 0,
+                  "examples": [20]
+                }
+              },
+              "additionalProperties": false
+            }
+          }
+        ]
+      }
+    }
+  },
+  "title": "GlazeWM settings",
+  "description": "GlazeWM settings",
+  "type": "object",
+  "properties": {
+    "general": {
+      "title": "general",
+      "description": "General settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+      "type": "object",
+      "properties": {
+        "focus_follows_cursor": {
+          "title": "focus follows cursor",
+          "description": "Whether to automatically focus windows underneath the cursor\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "boolean",
+          "default": false
+        },
+        "cursor_follows_focus": {
+          "title": "cursor follows focus",
+          "description": "Whether to jump the cursor between windows focused by the WM\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "boolean",
+          "default": false
+        },
+        "toggle_workspace_on_refocus": {
+          "title": "toggle workspace on refocus",
+          "description": "Whether to switch back and forth between the previously focused workspace when focusing the current workspace\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "boolean",
+          "default": true
+        },
+        "show_floating_on_top": {
+          "title": "show floating on top",
+          "description": "Whether to show floating windows as always on top\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "boolean",
+          "default": false
+        },
+        "floating_window_move_amount": {
+          "title": "floating window move amount",
+          "description": "An amount to move floating windows by\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "string",
+          "minLength": 2,
+          "pattern": "^\\d+%$",
+          "default": "5%"
+        },
+        "center_new_floating_windows": {
+          "title": "center new floating windows",
+          "description": "Whether to center new floating windows\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "type": "boolean",
+          "default": true
+        },
+        "window_animations": {
+          "title": "window animations",
+          "description": "Whether to enable window transition animations\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#general",
+          "oneOf": [
+            {
+              "type": "boolean"
+            },
+            { "type": "string", "const": "unchanged" }
+          ],
+          "default": "unchanged"
+        }
+      },
+      "additionalProperties": false
+    },
+    "keybindings": {
+      "title": "keybindings",
+      "description": "Keybindings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#keybindings",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "description": "A keybinding\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#keybindings",
+        "type": "object",
+        "oneOf": [
+          {
+            "properties": {
+              "binding": {
+                "$ref": "#/definitions/binding"
+              },
+              "command": {
+                "$ref": "#/definitions/command"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "bindings": {
+                "$ref": "#/definitions/bindings"
+              },
+              "command": {
+                "$ref": "#/definitions/command"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "binding": {
+                "$ref": "#/definitions/binding"
+              },
+              "commands": {
+                "$ref": "#/definitions/commands"
+              }
+            },
+            "additionalProperties": false
+          },
+          {
+            "properties": {
+              "bindings": {
+                "$ref": "#/definitions/bindings"
+              },
+              "commands": {
+                "$ref": "#/definitions/commands"
+              }
+            },
+            "additionalProperties": false
+          }
+        ],
+        "minProperties": 2,
+        "maxProperties": 2
+      },
+      "additionalProperties": false
+    },
+    "focus_borders": {
+      "title": "focus borders",
+      "description": "Focus settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+      "type": "object",
+      "properties": {
+        "active": {
+          "title": "active",
+          "description": "An active border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "title": "enabled",
+              "description": "Whether to enable the active border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+              "type": "boolean",
+              "default": true
+            },
+            "color": {
+              "title": "color",
+              "description": "A color of the active border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+              "$ref": "#/definitions/color"
+            }
+          },
+          "additionalProperties": false
+        },
+        "inactive": {
+          "title": "inactive",
+          "description": "An inactive border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "title": "enabled",
+              "description": "Whether to enable the inactive border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+              "type": "boolean",
+              "default": false
+            },
+            "color": {
+              "title": "color",
+              "description": "A color of the active border\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#focus-window-border-configuration",
+              "$ref": "#/definitions/color"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "gaps": {
+      "title": "gaps",
+      "description": "Gap settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#gap-configuration",
+      "type": "object",
+      "properties": {
+        "inner_gap": {
+          "title": "inner gap",
+          "description": "An inner gap\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#gap-configuration",
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "$ref": "#/definitions/invalid-shorthand-property"
+          },
+          "default": "20px"
+        },
+        "outer_gap": {
+          "title": "outer gap",
+          "description": "An outer gap\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#gap-configuration",
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "$ref": "#/definitions/invalid-shorthand-property"
+          },
+          "default": "20px"
+        }
+      },
+      "additionalProperties": false
+    },
+    "workspaces": {
+      "title": "workspaces",
+      "description": "Workspace settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "description": "A workspace setting\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "name",
+            "description": "A unique name of the workspace\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "examples": ["1"]
+          },
+          "display_name": {
+            "title": "display name",
+            "description": "A display name of the workspace\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "examples": ["1"]
+          },
+          "bind_to_monitor": {
+            "title": "bind to monitor",
+            "description": "A monitor number workspace is expected to be on\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+            "type": "integer",
+            "minimum": 1
+          },
+          "keep_alive": {
+            "title": "keep alive",
+            "description": "Whether not to destroy the workspace when it's empty\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#workspaces-configuration",
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "bar": {
+      "title": "bar",
+      "description": "Bar settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "title",
+          "description": "Whether to enable the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "boolean",
+          "default": true
+        },
+        "height": {
+          "title": "height",
+          "description": "A height of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/length",
+          "default": "30px"
+        },
+        "position": {
+          "title": "position",
+          "description": "A position of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "string",
+          "enum": ["top", "bottom"],
+          "default": "top"
+        },
+        "always_on_top": {
+          "title": "always on top",
+          "description": "Whether to keep the bar above other windows\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "boolean",
+          "default": false
+        },
+        "opacity": {
+          "description": "An opacity of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/opacity-property"
+        },
+        "background": {
+          "description": "A background of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/background-property"
+        },
+        "foreground": {
+          "description": "A foreground of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/foreground-property"
+        },
+        "font_family": {
+          "description": "A font family of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/font-family-property"
+        },
+        "font_size": {
+          "description": "A font size of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/font-size-property"
+        },
+        "font_weight": {
+          "description": "A font weight of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/font-weight-property"
+        },
+        "border_width": {
+          "description": "A border width of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/border-width-property"
+        },
+        "border_color": {
+          "description": "A border color of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/border-color-property"
+        },
+        "padding": {
+          "title": "padding",
+          "description": "A padding of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "string",
+          "minLength": 1,
+          "not": {
+            "$ref": "#/definitions/invalid-shorthand-property"
+          },
+          "default": "4px 6px 4px 6px"
+        },
+        "offset_x": {
+          "title": "offset x",
+          "description": "A horizontal offset of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "integer",
+          "default": 0
+        },
+        "offset_y": {
+          "title": "offset y",
+          "description": "A vertical offset of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "integer",
+          "default": 0
+        },
+        "border_radius": {
+          "title": "border radius",
+          "description": "A border radius of the bar\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "type": "integer",
+          "default": 0
+        },
+        "components_left": {
+          "title": "components left",
+          "description": "Left component settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/components"
+        },
+        "components_center": {
+          "title": "components center",
+          "description": "Center component settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/components"
+        },
+        "components_right": {
+          "title": "components right",
+          "description": "Right component settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#bar-configuration",
+          "$ref": "#/definitions/components"
+        }
+      },
+      "additionalProperties": false
+    },
+    "window_rules": {
+      "title": "windows rules",
+      "description": "Windows rule settings\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#window-rules",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "$ref": "#/definitions/command"
+          },
+          "match_process_name": {
+            "title": "match process name",
+            "description": "A process name to match\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#window-rules",
+            "type": "string",
+            "minLength": 1,
+            "examples": ["chrome"]
+          },
+          "match_title": {
+            "title": "match title",
+            "description": "A window title to match\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#window-rules",
+            "type": "string",
+            "minLength": 1,
+            "examples": ["/.*/"]
+          },
+          "match_class_name": {
+            "title": "match class name",
+            "description": "A class name to match\nhttps://github.com/glzr-io/glazewm?tab=readme-ov-file#window-rules",
+            "type": "string",
+            "minLength": 1,
+            "examples": ["Chrome_WidgetWin_1"]
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}
