@@ -41,6 +41,12 @@ jobs:
         run: |
           ./resources/scripts/package.ps1 -VersionNumber ${{ needs.next-version.outputs.new-release-version || '3.1.0' }}
 
+      - name: Package chocolatey
+        run: |
+          choco apikey --key $CHOCO_API_KEY --source https://push.chocolatey.org/
+          choco pack resources/chocolatey/glazewm.nuspec --version ${{ needs.next-version.outputs.new-release-version || '3.1.0' }} --outputdirectory out/
+          choco push out/glazewm.*.nupkg
+
       - uses: actions/upload-artifact@v4
         with:
           name: installers

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>glazewm</id>
+    <version>3.1.0</version>
+    <description>GlazeWM is a tiling window manager for Windows inspired by i3wm. </description>
+    <authors>glzr-io</authors>
+    <projectUrl>https://github.com/glzr-io/glazewm</projectUrl>
+    <license type="file">LICENSE.md</license>
+    <readme>README.md</readme>
+    <icon>icon.ico</icon>
+    <tags>glazewm window-manager</tags>
+  </metadata>
+  <files>
+    <file src="LICENSE.md" target="" />
+    <file src="README.md" target="" />
+    <file src="resources/assets/icon.ico" target="" />
+    <file src="tools\*" target="tools" />
+    <file src="out/installer-x64.msi" target="tools\installer-x64.msi" />
+    <file src="out/installer-arm64.msi" target="tools\installer-arm64.msi" />
+  </files>
+</package>
